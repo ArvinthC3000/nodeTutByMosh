@@ -2,3 +2,4 @@
 /.gitattributes
 /npm-demo/package-lock.json
 /.history
+/express-demo/node_modules
