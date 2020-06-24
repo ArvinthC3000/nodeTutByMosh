@@ -1,0 +1,4 @@
+/npm-demo/node_modules
+/.gitattributes
+/npm-demo/package-lock.json
+/.history
