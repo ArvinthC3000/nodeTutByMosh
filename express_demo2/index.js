@@ -21,7 +21,7 @@ app.get('/api/courses', (req, res) => {
 
 app.get('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id))
-    if (!course) res.status(404).send("No course id found for fiven ID.")
+    if (!course) return res.status(404).send("No course id found for fiven ID.")
     res.send(course)
 })
 
@@ -30,10 +30,8 @@ app.get('/api/courses/:id', (req, res) => {
 app.post('/api/courses', (req, res) => {
 
     const { error } = validateCourse(req.body)
-    if (error) {
-        res.status(400).send(error.details[0].message)
-        return;
-    }
+    if (error) return res.status(400).send(error.details[0].message)
+
     const course = {
         id: courses.length + 1,
         name: req.body.name
@@ -61,22 +59,35 @@ app.put('/api/courses/:id', (req, res) => {
     // Look for courses
     // If not exsist, return 404
     const course = courses.find(c => c.id === parseInt(req.params.id))
-    if (!course) res.status(404).send("No course id found for given ID.")
+    if (!course) return res.status(404).send("No course id found for given ID.")
 
-    // const result = validateCourse(req.body)
     const { error } = validateCourse(req.body)
     // Validate
     // If invalid, retur 400, Bad request
-    if (error) {
-        res.status(400).send(error.details[0].message)
-        return;
-    }
+    if (error) return res.status(400).send(error.details[0].message)
 
     // Update course
     // Return updated course
     course.name = req.body.name
     res.send(course)
 })
+
+// Delete
+
+app.delete('/api/courses/:id', (req, res) => {
+    const course = courses.find(c => c.id === parseInt(req.params.id))
+    if (!course) return res.status(404).send("No course id found for given ID.")
+
+    // Delete
+    const index = courses.indexOf(courses);
+    courses.splice(index, 1)
+
+    res.send(courses)
+
+})
+
+
+
 
 function validateCourse(course) {
     const schema = {
@@ -85,11 +96,6 @@ function validateCourse(course) {
     return Joi.validate(course, schema);
 
 }
-
-
-
-
-
 
 
 
