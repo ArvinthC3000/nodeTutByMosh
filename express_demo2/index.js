@@ -61,7 +61,7 @@ app.put('/api/courses/:id', (req, res) => {
     // Look for courses
     // If not exsist, return 404
     const course = courses.find(c => c.id === parseInt(req.params.id))
-    if (!course) res.status(404).send("No course id found for fiven ID.")
+    if (!course) res.status(404).send("No course id found for given ID.")
 
     // const result = validateCourse(req.body)
     const { error } = validateCourse(req.body)
@@ -75,7 +75,7 @@ app.put('/api/courses/:id', (req, res) => {
     // Update course
     // Return updated course
     course.name = req.body.name
-    req.send(course)
+    res.send(course)
 })
 
 function validateCourse(course) {
