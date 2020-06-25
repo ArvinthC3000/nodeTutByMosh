@@ -10,6 +10,7 @@ const courses = [
     { id: 3, name: 'course3' }
 ]
 
+// GET
 app.get('/', (req, res) => {
     res.send("Hello World!!!")
 })
@@ -18,17 +19,19 @@ app.get('/api/courses', (req, res) => {
     res.send(courses)
 })
 
+app.get('/api/courses/:id', (req, res) => {
+    const course = courses.find(c => c.id === parseInt(req.params.id))
+    if (!course) res.status(404).send("No course id found for fiven ID.")
+    res.send(course)
+})
+
+
+// POST
 app.post('/api/courses', (req, res) => {
-    const schema = {
-        name: Joi.string().min(3).required()
-    }
 
-    const result = Joi.validate(req.body, schema);
-
-    console.log(result);
-    if (result.error) {
-        // 400 Bad request
-        res.status(400).send(result.error.details[0].message)
+    const { error } = validateCourse(req.body)
+    if (error) {
+        res.status(400).send(error.details[0].message)
         return;
     }
     const course = {
@@ -53,11 +56,42 @@ app.post('/api/courses', (req, res) => {
 // })
 
 
-app.get('/api/courses/:id', (req, res) => {
+// PUT
+app.put('/api/courses/:id', (req, res) => {
+    // Look for courses
+    // If not exsist, return 404
     const course = courses.find(c => c.id === parseInt(req.params.id))
     if (!course) res.status(404).send("No course id found for fiven ID.")
-    res.send(course)
+
+    // const result = validateCourse(req.body)
+    const { error } = validateCourse(req.body)
+    // Validate
+    // If invalid, retur 400, Bad request
+    if (error) {
+        res.status(400).send(error.details[0].message)
+        return;
+    }
+
+    // Update course
+    // Return updated course
+    course.name = req.body.name
+    req.send(course)
 })
+
+function validateCourse(course) {
+    const schema = {
+        name: Joi.string().min(3).required()
+    }
+    return Joi.validate(course, schema);
+
+}
+
+
+
+
+
+
+
 
 const port = 3000
 
