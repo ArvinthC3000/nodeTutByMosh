@@ -1,10 +1,16 @@
+const config = require('config')
+const morgan = require('morgan')
+const helmet = require('helmet')
 const Joi = require('joi')
 const { authenticater, logger } = require('./authenticater')
 const express = require('express')
-const morgan = require('morgan')
-const helmet = require('helmet')
 
 const app = express()
+
+console.log('Application Name: ' + config.get('name'));
+console.log('Mail Server: ' + config.get('mail.host'));
+// console.log('Mail Password: ' + config.get('mail.password'));
+
 
 // console.log("NODE_ENV: " + process.env.NODE_ENV);       // By default - undefined
 // console.log("app: " + app.get('env'));                  // By default - developement
