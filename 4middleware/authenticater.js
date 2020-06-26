@@ -1,6 +1,9 @@
-module.exports = function authentication(req, res, next) {
+module.exports.authenticater = function (req, res, next) {
     console.log("Authentication...");
     next()
 }
 
-// module.exports = authentication
+module.exports.logger = function (req, res, next) {
+    console.log("Logging...")
+    next()          // Passing control to next middleware
+}

@@ -1,16 +1,14 @@
 const Joi = require('joi')
-const authenticater = require('./authenticater')
+const { authenticater, logger } = require('./authenticater')
 const express = require('express')
 
 const app = express()
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // Custom Middleware
-app.use(function (req, res, next) {
-    console.log("Logging...")
-    next()          // Passing control to next middleware
-})
+app.use(logger)
 
 app.use(authenticater)
 
@@ -44,7 +42,7 @@ app.post('/api/courses', (req, res) => {
         name: req.body.name
     }
     courses.push(course)
-    res.send(req.body)
+    res.send(courses)
 })
 
 app.put('/api/courses/:id', (req, res) => {
