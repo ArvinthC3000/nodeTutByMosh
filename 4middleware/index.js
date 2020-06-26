@@ -1,12 +1,20 @@
 const Joi = require('joi')
 const { authenticater, logger } = require('./authenticater')
 const express = require('express')
+const morgan = require('morgan')
+const helmet = require('helmet')
 
 const app = express()
+
+// console.log("NODE_ENV: " + process.env.NODE_ENV);       // By default - undefined
+// console.log("app: " + app.get('env'));                  // By default - developement
+
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
+if (app.get('env') === "development")
+    app.use(morgan('tiny'))
 
 // Custom Middleware
 app.use(logger)
