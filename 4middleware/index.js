@@ -15,17 +15,19 @@ console.log('Mail Server: ' + config.get('mail.host'));
 // console.log("NODE_ENV: " + process.env.NODE_ENV);       // By default - undefined
 // console.log("app: " + app.get('env'));                  // By default - developement
 
+app.set('view engine', 'pug')
+app.set('views', './views')  // Default
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
-if (app.get('env') === "development")
-    app.use(morgan('tiny'))
+// if (app.get('env') === "development")
+//     app.use(morgan('tiny'))
 
-// Custom Middleware
-app.use(logger)
+// // Custom Middleware
+// app.use(logger)
 
-app.use(authenticater)
+// app.use(authenticater)
 
 const courses = [
     { id: 1, name: 'course1' },
@@ -34,7 +36,7 @@ const courses = [
 ]
 
 app.get('/', (req, res) => {
-    res.send("Hello World!!!")
+    res.render('index', { title: 'My express app', message: 'Hello' })
 })
 
 app.get('/api/courses', (req, res) => {
